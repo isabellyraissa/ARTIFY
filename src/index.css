@@ -8,37 +8,37 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* ARTIFY Design System - Artisanal Marketplace */
-    --background: 36 29% 96%;
-    --foreground: 150 24% 10%;
+    /* ARTIFY Design System - Refined Artisanal Marketplace */
+    --background: 35 30% 97%;
+    --foreground: 165 25% 15%;
 
-    --card: 36 29% 98%;
-    --card-foreground: 150 24% 10%;
+    --card: 35 35% 99%;
+    --card-foreground: 165 25% 15%;
 
-    --popover: 36 29% 98%;
-    --popover-foreground: 150 24% 10%;
+    --popover: 35 35% 99%;
+    --popover-foreground: 165 25% 15%;
 
-    /* Verde sálvia - artesanal e natural */
-    --primary: 86 20% 60%;
-    --primary-foreground: 36 29% 96%;
+    /* Deep Teal - sofisticado e natural */
+    --primary: 165 35% 45%;
+    --primary-foreground: 35 30% 97%;
 
-    /* Areia dourada - calor e acolhimento */
-    --secondary: 35 51% 76%;
-    --secondary-foreground: 150 24% 10%;
+    /* Terracota - calor e destaque */
+    --secondary: 15 45% 60%;
+    --secondary-foreground: 35 30% 97%;
 
-    --muted: 86 15% 85%;
-    --muted-foreground: 150 12% 45%;
+    --muted: 35 20% 90%;
+    --muted-foreground: 165 15% 40%;
 
-    /* Azul petróleo - elegância */
-    --accent: 163 20% 30%;
-    --accent-foreground: 36 29% 96%;
+    /* Soft Mustard - microinterações e badges */
+    --accent: 40 60% 68%;
+    --accent-foreground: 165 25% 15%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 36 29% 96%;
+    --destructive-foreground: 35 30% 97%;
 
-    --border: 86 15% 85%;
-    --input: 86 15% 90%;
-    --ring: 86 20% 60%;
+    --border: 35 20% 88%;
+    --input: 35 20% 92%;
+    --ring: 165 35% 45%;
 
     --radius: 0.75rem;
 
@@ -60,33 +60,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 150 24% 10%;
-    --foreground: 36 29% 96%;
+    --background: 165 25% 12%;
+    --foreground: 35 30% 97%;
 
-    --card: 150 24% 12%;
-    --card-foreground: 36 29% 96%;
+    --card: 165 25% 14%;
+    --card-foreground: 35 30% 97%;
 
-    --popover: 150 24% 12%;
-    --popover-foreground: 36 29% 96%;
+    --popover: 165 25% 14%;
+    --popover-foreground: 35 30% 97%;
 
-    --primary: 86 20% 60%;
-    --primary-foreground: 36 29% 96%;
+    --primary: 165 35% 55%;
+    --primary-foreground: 35 30% 97%;
 
-    --secondary: 35 51% 76%;
-    --secondary-foreground: 150 24% 10%;
+    --secondary: 15 45% 65%;
+    --secondary-foreground: 165 25% 12%;
 
-    --muted: 150 15% 20%;
-    --muted-foreground: 86 15% 70%;
+    --muted: 165 15% 22%;
+    --muted-foreground: 35 20% 70%;
 
-    --accent: 163 20% 30%;
-    --accent-foreground: 36 29% 96%;
+    --accent: 40 60% 72%;
+    --accent-foreground: 165 25% 12%;
 
     --destructive: 0 62% 45%;
-    --destructive-foreground: 36 29% 96%;
+    --destructive-foreground: 35 30% 97%;
 
-    --border: 150 15% 25%;
-    --input: 150 15% 20%;
-    --ring: 86 20% 60%;
+    --border: 165 15% 25%;
+    --input: 165 15% 20%;
+    --ring: 165 35% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

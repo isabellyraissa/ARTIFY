@@ -24,9 +24,9 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="gallery-grid animate-fade-in-up">
+          <div className="gallery-grid">
             {featuredProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
 

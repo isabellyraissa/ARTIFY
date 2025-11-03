@@ -5,12 +5,10 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
 
 const Cart = () => {
-  // Mock cart data - will be replaced with actual cart state
-  const cartItems = [];
-
-  const subtotal = 0;
+  const { items: cartItems, subtotal, updateQuantity, removeFromCart } = useCart();
   const shipping = subtotal > 200 ? 0 : 15;
   const total = subtotal + shipping;
 
@@ -37,35 +35,32 @@ const Cart = () => {
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Cart Items */}
               <div className="lg:col-span-2 space-y-4">
-                {/* Example cart item structure */}
-                <Card className="p-4">
-                  <div className="flex gap-4">
-                    <div className="w-24 h-24 rounded-lg bg-muted overflow-hidden flex-shrink-0">
-                      {/* Product image */}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold mb-1">Nome do Produto</h3>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        por Artista
-                      </p>
-                      <p className="font-bold text-primary">R$ 89,90</p>
-                    </div>
-                    <div className="flex flex-col items-end justify-between">
-                      <Button variant="ghost" size="icon">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-8 w-8">
-                          <Minus className="h-3 w-3" />
+                {cartItems.map((item) => (
+                  <Card key={item.id} className="p-4">
+                    <div className="flex gap-4">
+                      <img src={item.image} alt={item.name} className="w-24 h-24 rounded-lg object-cover" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold mb-1">{item.name}</h3>
+                        <p className="text-sm text-muted-foreground mb-2">por {item.artist}</p>
+                        <p className="font-bold text-primary">R$ {item.price.toFixed(2)}</p>
+                      </div>
+                      <div className="flex flex-col items-end justify-between">
+                        <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)}>
+                          <Trash2 className="h-4 w-4" />
                         </Button>
-                        <span className="w-8 text-center">1</span>
-                        <Button variant="outline" size="icon" className="h-8 w-8">
-                          <Plus className="h-3 w-3" />
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          <span className="w-8 text-center">{item.quantity}</span>
+                          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+                ))}
               </div>
 
               {/* Order Summary */}

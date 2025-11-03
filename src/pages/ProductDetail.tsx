@@ -7,10 +7,14 @@ import { Heart, ShoppingCart, Star, Package, Shield, Truck } from "lucide-react"
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import ProductCard from "@/components/ProductCard";
+import { useCart } from "@/contexts/CartContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
+  const { addToCart } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   if (!product) {
     return (
@@ -121,12 +125,12 @@ const ProductDetail = () => {
 
               {/* Actions */}
               <div className="flex gap-3">
-                <Button size="lg" className="flex-1">
+                <Button size="lg" className="flex-1" onClick={() => addToCart(product)} disabled={product.stock === 0}>
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Adicionar ao Carrinho
                 </Button>
-                <Button size="lg" variant="outline">
-                  <Heart className="h-5 w-5" />
+                <Button size="lg" variant={isFavorite(product.id) ? "secondary" : "outline"} onClick={() => toggleFavorite(product)}>
+                  <Heart className={`h-5 w-5 ${isFavorite(product.id) ? "fill-current" : ""}`} />
                 </Button>
               </div>
 
@@ -154,8 +158,8 @@ const ProductDetail = () => {
           <section className="container px-4 md:px-6 py-16 border-t">
             <h2 className="text-3xl font-bold mb-8">Você também pode gostar</h2>
             <div className="gallery-grid">
-              {relatedProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
+              {relatedProducts.map((p) => (
+                <ProductCard key={p.id} product={p} />
               ))}
             </div>
           </section>
