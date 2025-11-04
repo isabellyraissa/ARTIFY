@@ -1,6 +1,5 @@
 import { useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import MainLayout from "@/components/MainLayout";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,8 +29,7 @@ const Location = () => {
     : products.slice(0, 3);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <MainLayout>
       <main className="flex-1">
         <section className="container px-4 md:px-6 py-12">
           <div className="max-w-3xl mx-auto text-center mb-12">
@@ -172,8 +170,7 @@ const Location = () => {
           </div>
         </section>
       </main>
-      <Footer />
-    </div>
+    </MainLayout>
   );
 };
 

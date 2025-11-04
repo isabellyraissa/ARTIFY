@@ -1,12 +1,9 @@
-import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
-import Footer from "@/components/Footer";
+import MainLayout from "@/components/MainLayout";
 import { products } from "@/data/products";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SlidersHorizontal } from "lucide-react";
-import Sidebar from "@/components/Sidebar";
 
 const Products = () => {
   const [sortBy, setSortBy] = useState("featured");
@@ -19,8 +16,7 @@ const Products = () => {
     : products.filter(p => p.category.toLowerCase() === selectedCategory);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <MainLayout>
       <main className="flex-1">
         {/* Page Header */}
         <section className="bg-muted/30 py-12 md:py-16">
@@ -32,16 +28,9 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Layout with Sidebar */}
+        {/* Products Section */}
         <section className="container px-4 md:px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-6">
-            {/* Sidebar on desktop */}
-            <div className="hidden lg:block">
-              <Sidebar />
-            </div>
-
-            {/* Main content */}
-            <div>
+          <div>
               {/* Sorting */}
               <div className="flex items-center justify-between gap-4 mb-4">
                 <p className="text-sm text-muted-foreground">
@@ -77,12 +66,10 @@ const Products = () => {
                   </p>
                 </div>
               )}
-            </div>
           </div>
         </section>
       </main>
-      <Footer />
-    </div>
+    </MainLayout>
   );
 };
 

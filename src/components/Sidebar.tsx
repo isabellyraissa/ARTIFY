@@ -1,10 +1,23 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, ChevronRight, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronRight, Sparkles, Home, ShoppingBag, MapPin, Flame, Star, Leaf } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { products } from "@/data/products";
+import {
+  Sidebar as SidebarUI,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+  SidebarHeader,
+  SidebarFooter,
+} from "@/components/ui/sidebar";
 
 const categoryNames = Array.from(new Set(products.map((p) => p.category))).sort();
 const categories = categoryNames.map((name) => ({
@@ -25,123 +38,143 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-card border-r border-border h-full overflow-y-auto">
-      <div className="p-6 border-b border-border">
-        <h2 className="font-display text-xl font-bold flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-accent" />
-          Categorias
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          Explore por categoria
-        </p>
-      </div>
+    <SidebarUI collapsible="icon">
+      <SidebarHeader className="border-b px-4 py-4">
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-primary" />
+          <div className="flex-1 group-data-[collapsible=icon]:hidden">
+            <h2 className="font-display text-lg font-bold">ARTIFY</h2>
+            <p className="text-xs text-muted-foreground">Marketplace Artesanal</p>
+          </div>
+        </div>
+      </SidebarHeader>
 
-      <nav className="p-4 space-y-1">
-        <Link to="/produtos">
-          <Button
-            variant={location.pathname === "/produtos" && !location.search ? "secondary" : "ghost"}
-            className="w-full justify-start"
-          >
-            Todos os Produtos
-            <Badge variant="secondary" className="ml-auto">
-              {products.length}
-            </Badge>
-          </Button>
-        </Link>
-
-        {categories.map((category) => {
-          const isExpanded = expandedCategories.includes(category.name);
-          const isActive = location.search.includes(`category=${category.name}`);
-
-          return (
-            <div key={category.name}>
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 shrink-0"
-                  onClick={() => toggleCategory(category.name)}
-                >
-                  {isExpanded ? (
-                    <ChevronDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronRight className="h-4 w-4" />
-                  )}
-                </Button>
-                <Link to={`/produtos?category=${category.name}`} className="flex-1">
-                  <Button
-                    variant={isActive ? "secondary" : "ghost"}
-                    className="w-full justify-start"
-                  >
-                    {category.name}
-                    <Badge variant="secondary" className="ml-auto">
-                      {category.count}
+      <SidebarContent>
+        {/* Main Navigation */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Navegação</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={location.pathname === "/"}>
+                  <Link to="/">
+                    <Home className="h-4 w-4" />
+                    <span>Início</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={location.pathname === "/produtos"}>
+                  <Link to="/produtos">
+                    <ShoppingBag className="h-4 w-4" />
+                    <span>Produtos</span>
+                    <Badge variant="secondary" className="ml-auto group-data-[collapsible=icon]:hidden">
+                      {products.length}
                     </Badge>
-                  </Button>
-                </Link>
-              </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={location.pathname === "/localizacao"}>
+                  <Link to="/localizacao">
+                    <MapPin className="h-4 w-4" />
+                    <span>Perto de Você</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-              {isExpanded && (
-                <div className="ml-9 mt-1 space-y-1">
-                  {products
-                    .filter((p) => p.category === category.name)
-                    .slice(0, 3)
-                    .map((product) => (
-                      <Link key={product.id} to={`/produto/${product.id}`}>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-start text-xs h-8"
-                        >
-                          <div className="flex items-center gap-2 w-full">
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              className="h-6 w-6 rounded object-cover"
-                            />
-                            <span className="truncate flex-1 text-left">
-                              {product.name}
-                            </span>
-                          </div>
-                        </Button>
-                      </Link>
-                    ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {/* Categories */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Categorias</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {categories.map((category) => {
+                const isExpanded = expandedCategories.includes(category.name);
+                const isActive = location.search.includes(`category=${category.name}`);
 
-        <div className="pt-4 border-t border-border">
-          <Link to="/localizacao">
-            <Button
-              variant={location.pathname === "/localizacao" ? "secondary" : "ghost"}
-              className="w-full justify-start"
-            >
-              📍 Perto de Você
-            </Button>
-          </Link>
-        </div>
+                return (
+                  <SidebarMenuItem key={category.name}>
+                    <SidebarMenuButton
+                      onClick={() => toggleCategory(category.name)}
+                      isActive={isActive}
+                    >
+                      {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                      <span>{category.name}</span>
+                      <Badge variant="secondary" className="ml-auto group-data-[collapsible=icon]:hidden">
+                        {category.count}
+                      </Badge>
+                    </SidebarMenuButton>
+                    {isExpanded && (
+                      <SidebarMenuSub>
+                        {products
+                          .filter((p) => p.category === category.name)
+                          .slice(0, 3)
+                          .map((product) => (
+                            <SidebarMenuSubItem key={product.id}>
+                              <SidebarMenuSubButton asChild>
+                                <Link to={`/produto/${product.id}`}>
+                                  <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="h-5 w-5 rounded object-cover"
+                                  />
+                                  <span className="truncate">{product.name}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                      </SidebarMenuSub>
+                    )}
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-        <div className="pt-2">
-          <Link to="/produtos?filter=promocao">
-            <Button variant="ghost" className="w-full justify-start text-secondary">
-              🔥 Em Promoção
-            </Button>
-          </Link>
-          <Link to="/produtos?filter=novos">
-            <Button variant="ghost" className="w-full justify-start">
-              ✨ Novidades
-            </Button>
-          </Link>
-          <Link to="/produtos?filter=sustentavel">
-            <Button variant="ghost" className="w-full justify-start">
-              🌿 Sustentável
-            </Button>
-          </Link>
-        </div>
-      </nav>
-    </aside>
+        {/* Filters */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Filtros</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/produtos?filter=promocao">
+                    <Flame className="h-4 w-4 text-destructive" />
+                    <span>Em Promoção</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/produtos?filter=novos">
+                    <Star className="h-4 w-4 text-yellow-500" />
+                    <span>Novidades</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/produtos?filter=sustentavel">
+                    <Leaf className="h-4 w-4 text-green-600" />
+                    <span>Sustentável</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter className="border-t p-4">
+        <p className="text-xs text-muted-foreground text-center group-data-[collapsible=icon]:hidden">
+          © 2024 ARTIFY
+        </p>
+      </SidebarFooter>
+    </SidebarUI>
   );
 };
 

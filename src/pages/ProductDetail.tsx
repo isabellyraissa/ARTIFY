@@ -1,7 +1,6 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { useParams, Link } from "react-router-dom";
 import { products } from "@/data/products";
+import MainLayout from "@/components/MainLayout";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Star, Package, Shield, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -18,16 +17,14 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
+      <MainLayout showSidebar={false}>
         <main className="flex-1 container px-4 md:px-6 py-16 text-center">
           <h1 className="text-4xl font-bold mb-4">Produto não encontrado</h1>
           <Link to="/produtos">
             <Button>Voltar aos Produtos</Button>
           </Link>
         </main>
-        <Footer />
-      </div>
+      </MainLayout>
     );
   }
 
@@ -36,8 +33,7 @@ const ProductDetail = () => {
     .slice(0, 4);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <MainLayout>
       <main className="flex-1">
         {/* Product Detail */}
         <section className="container px-4 md:px-6 py-12">
@@ -165,8 +161,7 @@ const ProductDetail = () => {
           </section>
         )}
       </main>
-      <Footer />
-    </div>
+    </MainLayout>
   );
 };
 

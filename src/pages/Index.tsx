@@ -1,7 +1,6 @@
-import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
-import Footer from "@/components/Footer";
+import MainLayout from "@/components/MainLayout";
 import { products } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -10,8 +9,7 @@ const Index = () => {
   const featuredProducts = products.slice(0, 4);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
+    <MainLayout>
       <main className="flex-1">
         <Hero />
         
@@ -80,9 +78,7 @@ const Index = () => {
           </div>
         </section>
       </main>
-      
-      <Footer />
-    </div>
+    </MainLayout>
   );
 };
 
