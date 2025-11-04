@@ -75,7 +75,7 @@ const Products = () => {
         <section className="container px-4 md:px-6 pb-16">
           <div className="gallery-grid">
             {filteredProducts.map((product) => (
-              <ProductCard key={product.id} {...product} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
 

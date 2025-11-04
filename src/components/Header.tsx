@@ -41,10 +41,16 @@ const Header = () => {
 
           <nav className="flex items-center gap-2">
             <Link to="/produtos">
-              <Button variant="ghost">Produtos</Button>
+              <Button variant="ghost" className="hidden md:flex">Produtos</Button>
+            </Link>
+            <Link to="/blog">
+              <Button variant="ghost" className="hidden md:flex">Blog</Button>
+            </Link>
+            <Link to="/eventos">
+              <Button variant="ghost" className="hidden md:flex">Eventos</Button>
             </Link>
             
-            <Link to="/produtos?view=favoritos">
+            <Link to="/cliente">
               <Button variant="ghost" size="icon" className="relative">
                 <Heart className="h-5 w-5" />
                 {favorites.length > 0 && (

@@ -42,13 +42,18 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/categorias" className="text-muted-foreground hover:text-primary transition-colors">
-                  Categorias
+                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">
+                  Blog
                 </Link>
               </li>
               <li>
-                <Link to="/sobre" className="text-muted-foreground hover:text-primary transition-colors">
-                  Sobre Nós
+                <Link to="/eventos" className="text-muted-foreground hover:text-primary transition-colors">
+                  Eventos
+                </Link>
+              </li>
+              <li>
+                <Link to="/localizacao" className="text-muted-foreground hover:text-primary transition-colors">
+                  Localização
                 </Link>
               </li>
             </ul>
@@ -59,24 +64,24 @@ const Footer = () => {
             <h4 className="font-semibold">Suporte</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/contato" className="text-muted-foreground hover:text-primary transition-colors">
-                  Contato
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
+                <Link to="/cliente" className="text-muted-foreground hover:text-primary transition-colors">
+                  Painel do Cliente
                 </Link>
               </li>
               <li>
                 <Link to="/vendedor" className="text-muted-foreground hover:text-primary transition-colors">
-                  Seja um Vendedor
+                  Painel do Vendedor
                 </Link>
               </li>
               <li>
-                <Link to="/politicas" className="text-muted-foreground hover:text-primary transition-colors">
-                  Políticas
+                <Link to="/auth" className="text-muted-foreground hover:text-primary transition-colors">
+                  Login / Cadastro
                 </Link>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  Ajuda
+                </a>
               </li>
             </ul>
           </div>
