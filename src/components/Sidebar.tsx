@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { products } from "@/data/products";
 
-const categories = [
-  { name: "Cerâmica", count: products.filter(p => p.category === "Cerâmica").length },
-  { name: "Decoração", count: products.filter(p => p.category === "Decoração").length },
-  { name: "Joias", count: products.filter(p => p.category === "Joias").length },
-];
+const categoryNames = Array.from(new Set(products.map((p) => p.category))).sort();
+const categories = categoryNames.map((name) => ({
+  name,
+  count: products.filter((p) => p.category === name).length,
+}));
 
 const Sidebar = () => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["Cerâmica"]);

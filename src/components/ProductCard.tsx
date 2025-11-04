@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { Product } from "@/data/products";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 
 interface ProductCardProps {
   product: Product;
@@ -85,15 +86,48 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <span className="text-2xl font-bold text-primary">
             R$ {product.price.toFixed(2)}
           </span>
-          <Button
-            size="sm"
-            onClick={handleAddToCart}
-            disabled={product.stock === 0}
-            className="gap-1"
-          >
-            <ShoppingCart className="h-4 w-4" />
-            Adicionar
-          </Button>
+          <div className="flex items-center gap-2">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1">
+                  <Eye className="h-4 w-4" />
+                  Ver rápido
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>{product.name}</DialogTitle>
+                  <DialogDescription>por {product.artist}</DialogDescription>
+                </DialogHeader>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <img src={product.image} alt={product.name} className="w-full h-64 object-cover rounded" />
+                  <div className="space-y-3">
+                    <Badge variant="secondary">{product.category}</Badge>
+                    <p className="text-sm text-muted-foreground line-clamp-4">{product.description}</p>
+                    <p className="text-2xl font-bold text-primary">R$ {product.price.toFixed(2)}</p>
+                    <div className="flex gap-2">
+                      <Button onClick={handleAddToCart} className="gap-1">
+                        <ShoppingCart className="h-4 w-4" />
+                        Adicionar ao Carrinho
+                      </Button>
+                      <Link to={`/produto/${product.id}`}>
+                        <Button variant="ghost">Ver detalhes</Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Button
+              size="sm"
+              onClick={handleAddToCart}
+              disabled={product.stock === 0}
+              className="gap-1"
+            >
+              <ShoppingCart className="h-4 w-4" />
+              Adicionar
+            </Button>
+          </div>
         </div>
       </div>
     </Card>
