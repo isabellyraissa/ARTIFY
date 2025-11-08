@@ -38,13 +38,15 @@ const Sidebar = () => {
   };
 
   return (
-    <SidebarUI collapsible="icon">
-      <SidebarHeader className="border-b px-4 py-4">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
+    <SidebarUI collapsible="icon" className="border-r-2">
+      <SidebarHeader className="border-b-2 border-primary/20 px-4 py-6 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Sparkles className="h-6 w-6 text-primary" />
+          </div>
           <div className="flex-1 group-data-[collapsible=icon]:hidden">
-            <h2 className="font-display text-lg font-bold">ARTIFY</h2>
-            <p className="text-xs text-muted-foreground">Marketplace Artesanal</p>
+            <h2 className="font-display text-2xl font-bold text-primary">ARTIFY</h2>
+            <p className="text-xs text-muted-foreground font-medium">Marketplace Artesanal</p>
           </div>
         </div>
       </SidebarHeader>

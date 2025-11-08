@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Package, Plus, BarChart3, MessageSquare, Store, DollarSign } from "lucide-react";
+import { Package, Plus, BarChart3, MessageSquare, Store, DollarSign, Tag } from "lucide-react";
 
 const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState("produtos");
@@ -23,7 +23,7 @@ const SellerDashboard = () => {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-8">
+            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 mb-8">
               <TabsTrigger value="produtos" className="gap-2">
                 <Package className="h-4 w-4" />
                 <span className="hidden sm:inline">Produtos</span>
@@ -31,6 +31,10 @@ const SellerDashboard = () => {
               <TabsTrigger value="novo" className="gap-2">
                 <Plus className="h-4 w-4" />
                 <span className="hidden sm:inline">Novo</span>
+              </TabsTrigger>
+              <TabsTrigger value="cupons" className="gap-2">
+                <Tag className="h-4 w-4" />
+                <span className="hidden sm:inline">Cupons</span>
               </TabsTrigger>
               <TabsTrigger value="estatisticas" className="gap-2">
                 <BarChart3 className="h-4 w-4" />
@@ -115,6 +119,67 @@ const SellerDashboard = () => {
                   <div className="flex gap-4">
                     <Button className="flex-1">Publicar Produto</Button>
                     <Button variant="outline">Salvar como Rascunho</Button>
+                  </div>
+                </div>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="cupons" className="space-y-4">
+              <Card className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold">Cupons da Loja</h2>
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Criar Cupom
+                  </Button>
+                </div>
+                <div className="space-y-4 max-w-2xl">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="coupon-name">Nome do Cupom *</Label>
+                      <Input id="coupon-name" placeholder="Ex: PRIMEIRACOMPRA" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="discount">Desconto (%) *</Label>
+                      <Input id="discount" type="number" placeholder="10" />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="min-value">Valor Mínimo (R$)</Label>
+                      <Input id="min-value" type="number" placeholder="50.00" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="max-uses">Usos Máximos</Label>
+                      <Input id="max-uses" type="number" placeholder="100" />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="valid-from">Válido De</Label>
+                      <Input id="valid-from" type="date" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="valid-until">Válido Até</Label>
+                      <Input id="valid-until" type="date" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="coupon-description">Descrição</Label>
+                    <Textarea 
+                      id="coupon-description" 
+                      placeholder="Descreva as condições do cupom..."
+                      rows={3}
+                    />
+                  </div>
+                  <Button>Criar Cupom</Button>
+
+                  <div className="mt-8 pt-6 border-t">
+                    <h3 className="font-semibold mb-4">Cupons Ativos</h3>
+                    <div className="text-center py-8">
+                      <Tag className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                      <p className="text-muted-foreground">Nenhum cupom criado ainda</p>
+                    </div>
                   </div>
                 </div>
               </Card>

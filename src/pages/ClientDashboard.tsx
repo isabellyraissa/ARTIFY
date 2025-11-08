@@ -156,11 +156,53 @@ const ClientDashboard = () => {
               <Card className="p-6">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-2xl font-bold">Meus Endereços</h2>
-                  <Button>Adicionar Endereço</Button>
+                  <Button>
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Adicionar Endereço
+                  </Button>
                 </div>
-                <div className="text-center py-12">
-                  <MapPin className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Nenhum endereço cadastrado</p>
+                <div className="space-y-4 max-w-2xl">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="street">Rua *</Label>
+                      <Input id="street" placeholder="Nome da rua" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="number">Número *</Label>
+                      <Input id="number" placeholder="000" />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="complement">Complemento</Label>
+                      <Input id="complement" placeholder="Apto, bloco, etc" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="neighborhood">Bairro *</Label>
+                      <Input id="neighborhood" placeholder="Bairro" />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="city">Cidade *</Label>
+                      <Input id="city" placeholder="Cidade" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="state">Estado *</Label>
+                      <Input id="state" placeholder="UF" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="zip">CEP *</Label>
+                      <Input id="zip" placeholder="00000-000" />
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="default" className="rounded" />
+                    <label htmlFor="default" className="text-sm">
+                      Definir como endereço padrão
+                    </label>
+                  </div>
+                  <Button>Salvar Endereço</Button>
                 </div>
               </Card>
             </TabsContent>
@@ -168,9 +210,21 @@ const ClientDashboard = () => {
             <TabsContent value="cupons" className="space-y-4">
               <Card className="p-6">
                 <h2 className="text-2xl font-bold mb-4">Meus Cupons</h2>
-                <div className="text-center py-12">
-                  <Tag className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Você não tem cupons disponíveis</p>
+                <div className="space-y-4 max-w-2xl">
+                  <div className="space-y-2">
+                    <Label htmlFor="coupon-code">Resgatar Cupom</Label>
+                    <div className="flex gap-2">
+                      <Input id="coupon-code" placeholder="Digite o código do cupom" />
+                      <Button>Resgatar</Button>
+                    </div>
+                  </div>
+                  <div className="text-center py-8">
+                    <Tag className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-muted-foreground">Você não tem cupons disponíveis</p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Cupons resgatados aparecerão aqui
+                    </p>
+                  </div>
                 </div>
               </Card>
             </TabsContent>
