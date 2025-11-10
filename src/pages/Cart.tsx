@@ -175,9 +175,11 @@ const Cart = () => {
                       <span className="text-primary">R$ {total.toFixed(2)}</span>
                     </div>
                   </div>
-                  <Button className="w-full mt-6" size="lg" disabled={cartItems.length === 0}>
-                    Finalizar Compra
-                  </Button>
+                  <Link to="/finalizar">
+                    <Button className="w-full mt-6" size="lg" disabled={cartItems.length === 0}>
+                      Finalizar Compra
+                    </Button>
+                  </Link>
                   <Link to="/produtos">
                     <Button variant="outline" className="w-full mt-3">
                       Continuar Comprando
