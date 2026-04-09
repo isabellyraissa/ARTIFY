@@ -1,0 +1,23 @@
+ M .gitignore
+MM package-lock.json
+MM package.json
+ M src/App.tsx
+ M src/components/Header.tsx
+ M src/components/Hero.tsx
+ M src/components/ui/command.tsx
+ M src/components/ui/textarea.tsx
+ M src/contexts/NotificationsContext.tsx
+ M src/index.css
+ M src/pages/Auth.tsx
+ M src/pages/ProductDetail.tsx
+ M src/pages/Products.tsx
+ M src/pages/SellerDashboard.tsx
+ M tailwind.config.ts
+?? backups/
+?? src/hooks/useDatabaseProducts.ts
+?? src/lib/authProfile.ts
+?? src/lib/supabase.ts
+?? src/pages/Profile.tsx
+?? src/testeSupabase.ts
+?? supabase_google_auth.sql
+?? testeSupabase.js

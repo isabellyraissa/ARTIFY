@@ -1,17 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, User, Heart, Bell, MessageSquare } from "lucide-react";
+import type { Session } from "@supabase/supabase-js";
+import { Bell, Heart, MessageSquare, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useNotifications } from "@/contexts/NotificationsContext";
-import { products } from "@/data/products";
-import { artisans } from "@/data/artisans";
+import { products, type Product } from "@/data/products";
+import { artisans, type Artisan } from "@/data/artisans";
+import { supabase } from "@/lib/supabase";
 import MiniCart from "./MiniCart";
+
+type SearchResult =
+  | { type: "product"; item: Product }
+  | { type: "store"; item: Artisan };
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,21 +25,19 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isArtisan, setIsArtisan] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
 
-  const searchResults = searchQuery
+  const searchResults: SearchResult[] = searchQuery
     ? [
         ...products
-          .filter((p) =>
-            p.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+          .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
           .slice(0, 3)
           .map((p) => ({ type: "product" as const, item: p })),
         ...artisans
-          .filter((a) =>
-            a.storeName.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+          .filter((a) => a.storeName.toLowerCase().includes(searchQuery.toLowerCase()))
           .slice(0, 2)
           .map((a) => ({ type: "store" as const, item: a })),
       ]
@@ -49,8 +52,60 @@ const Header = () => {
         setShowNotifications(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!active) return;
+      setSession(data.session);
+      if (!data.session) {
+        setIsArtisan(false);
+        return;
+      }
+
+      const { data: userRow } = await supabase
+        .from("users")
+        .select("tipo")
+        .eq("id", data.session.user.id)
+        .maybeSingle();
+
+      if (!active) return;
+      const tipo = userRow?.tipo?.toLowerCase() ?? "";
+      setIsArtisan(tipo === "artesao" || tipo === "vendedor");
+    };
+
+    void loadSession();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      if (!active) return;
+      setSession(currentSession);
+      if (!currentSession) {
+        setIsArtisan(false);
+        return;
+      }
+
+      void (async () => {
+        const { data: userRow } = await supabase
+          .from("users")
+          .select("tipo")
+          .eq("id", currentSession.user.id)
+          .maybeSingle();
+        if (!active) return;
+        const tipo = userRow?.tipo?.toLowerCase() ?? "";
+        setIsArtisan(tipo === "artesao" || tipo === "vendedor");
+      })();
+    });
+
+    return () => {
+      active = false;
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   const handleSearch = (query: string) => {
@@ -58,10 +113,10 @@ const Header = () => {
     setShowSearchResults(query.length > 0);
   };
 
-  const handleSelectResult = (type: string, id: string) => {
+  const handleSelectResult = (type: SearchResult["type"], id: string) => {
     if (type === "product") {
       navigate(`/produto/${id}`);
-    } else if (type === "store") {
+    } else {
       navigate(`/loja/${id}`);
     }
     setSearchQuery("");
@@ -83,7 +138,7 @@ const Header = () => {
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Buscar produtos, artesãos..."
+                placeholder="Buscar produtos, artesaos..."
                 className="w-full pl-10"
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
@@ -102,39 +157,27 @@ const Header = () => {
                       {searchResults.map((result, idx) => (
                         <button
                           key={idx}
-                          onClick={() =>
-                            handleSelectResult(result.type, result.item.id)
-                          }
+                          onClick={() => handleSelectResult(result.type, result.item.id)}
                           className="w-full p-3 text-left hover:bg-muted rounded-lg transition-colors flex items-center gap-3"
                         >
                           {result.type === "product" ? (
                             <>
-                              <img
-                                src={(result.item as any).image}
-                                alt={(result.item as any).name}
-                                className="w-12 h-12 rounded object-cover"
-                              />
+                              <img src={result.item.image} alt={result.item.name} className="w-12 h-12 rounded object-cover" />
                               <div>
-                                <p className="font-medium">{(result.item as any).name}</p>
-                                <p className="text-sm text-muted-foreground">
-                                  R$ {(result.item as any).price.toFixed(2)}
-                                </p>
+                                <p className="font-medium">{result.item.name}</p>
+                                <p className="text-sm text-muted-foreground">R$ {result.item.price.toFixed(2)}</p>
                               </div>
                             </>
                           ) : (
                             <>
                               <img
-                                src={(result.item as any).avatar}
-                                alt={(result.item as any).storeName}
+                                src={result.item.avatar}
+                                alt={result.item.storeName}
                                 className="w-12 h-12 rounded-full object-cover"
                               />
                               <div>
-                                <p className="font-medium">
-                                  {(result.item as any).storeName}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  Loja • {(result.item as any).specialty}
-                                </p>
+                                <p className="font-medium">{result.item.storeName}</p>
+                                <p className="text-sm text-muted-foreground">Loja • {result.item.specialty}</p>
                               </div>
                             </>
                           )}
@@ -149,16 +192,24 @@ const Header = () => {
 
           <nav className="flex items-center gap-2">
             <Link to="/produtos">
-              <Button variant="ghost" className="hidden lg:flex">Produtos</Button>
+              <Button variant="ghost" className="hidden lg:flex">
+                Produtos
+              </Button>
             </Link>
             <Link to="/artesaos">
-              <Button variant="ghost" className="hidden lg:flex">Artesãos</Button>
+              <Button variant="ghost" className="hidden lg:flex">
+                Artesaos
+              </Button>
             </Link>
             <Link to="/blog">
-              <Button variant="ghost" className="hidden lg:flex">Blog</Button>
+              <Button variant="ghost" className="hidden lg:flex">
+                Blog
+              </Button>
             </Link>
             <Link to="/eventos">
-              <Button variant="ghost" className="hidden lg:flex">Eventos</Button>
+              <Button variant="ghost" className="hidden lg:flex">
+                Eventos
+              </Button>
             </Link>
 
             <Link to="/mensagens">
@@ -188,13 +239,9 @@ const Header = () => {
               {showNotifications && (
                 <Card className="absolute top-full right-0 mt-2 w-80 z-50">
                   <div className="p-4 border-b flex items-center justify-between">
-                    <h3 className="font-semibold">Notificações</h3>
+                    <h3 className="font-semibold">Notificacoes</h3>
                     {unreadCount > 0 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => markAllAsRead()}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => markAllAsRead()}>
                         Marcar todas como lidas
                       </Button>
                     )}
@@ -202,9 +249,7 @@ const Header = () => {
                   <ScrollArea className="max-h-96">
                     <div className="p-2">
                       {notifications.length === 0 ? (
-                        <p className="text-center text-muted-foreground py-8">
-                          Nenhuma notificação
-                        </p>
+                        <p className="text-center text-muted-foreground py-8">Nenhuma notificacao</p>
                       ) : (
                         notifications.map((notif) => (
                           <button
@@ -221,9 +266,7 @@ const Header = () => {
                             <div className="flex items-start justify-between gap-2">
                               <div className="flex-1">
                                 <p className="font-medium text-sm">{notif.title}</p>
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  {notif.message}
-                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">{notif.message}</p>
                                 <p className="text-xs text-muted-foreground mt-1">
                                   {notif.timestamp.toLocaleTimeString("pt-BR", {
                                     hour: "2-digit",
@@ -231,9 +274,7 @@ const Header = () => {
                                   })}
                                 </p>
                               </div>
-                              {!notif.read && (
-                                <div className="w-2 h-2 rounded-full bg-primary" />
-                              )}
+                              {!notif.read && <div className="w-2 h-2 rounded-full bg-primary" />}
                             </div>
                           </button>
                         ))
@@ -243,7 +284,7 @@ const Header = () => {
                 </Card>
               )}
             </div>
-            
+
             <Link to="/cliente">
               <Button variant="ghost" size="icon" className="relative">
                 <Heart className="h-5 w-5" />
@@ -257,10 +298,10 @@ const Header = () => {
                 )}
               </Button>
             </Link>
-            
+
             <MiniCart />
-            
-            <Link to="/auth">
+
+            <Link to={session ? (isArtisan ? "/vendedor" : "/perfil") : "/auth"}>
               <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
               </Button>
